@@ -30,6 +30,7 @@ export default async function handle(req: NextRequest) {
     )
   }
   const user = await res.json()
+  console.log(user)
 
   return new ImageResponse(
     (
@@ -52,7 +53,16 @@ export default async function handle(req: NextRequest) {
           <div tw="flex w-2/3 flex-col pr-16">
             <div tw="text-7xl">{user.name}</div>
             <div tw="text-3xl text-slate-600 mb-2">{user.login}</div>
-            {user.bio && <div tw="text-3xl">{user.bio.trim()}</div>}
+            {user.bio && (
+              <div tw="text-3xl">
+                {user.bio
+                  .replace(
+                    /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
+                    ''
+                  )
+                  .trim()}
+              </div>
+            )}
             <div tw="flex mb-2 mt-8">
               👾{' '}
               {user.followers <= 1
