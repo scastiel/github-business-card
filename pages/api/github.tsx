@@ -40,6 +40,7 @@ export default async function handle(req: NextRequest) {
               <img
                 src={user.avatar_url}
                 tw="w-64 h-64 rounded-full shadow-2xl mb-4"
+                style={{ objectPosition: 'center', objectFit: 'cover' }}
               />
               <div tw="text-xl text-slate-500">{`Since ${new Date(
                 user.created_at
