@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { PropsWithChildren } from 'react'
 import '../styles/globals.css'
 
@@ -5,7 +6,7 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
   return (
     <html lang="en">
       <head>
-        <title>GitHub Image</title>
+        <title>GitHub Business Card</title>
         <meta name="viewport" content="width=device-width" />
         {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
           <script
@@ -17,7 +18,9 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
       </head>
       <body>
         <header className="bg-slate-800 text-white p-2 text-lg">
-          <h1>Your GitHub business card</h1>
+          <h1>
+            <Link href="/">GitHub Business Card</Link>
+          </h1>
         </header>
         <main className="mb-16">{children}</main>
       </body>
