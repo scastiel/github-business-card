@@ -37,13 +37,11 @@ export default function Generator() {
         <br />
         <small>(it’s an image!)</small>
       </div>
-      <div style={{ width: 600, height: 314 }}>
-        {isBrowser && (
-          <div
-            dangerouslySetInnerHTML={{ __html: htmlCodeForUserName(username) }}
-          />
-        )}
-      </div>
+      {isBrowser && (
+        <div
+          dangerouslySetInnerHTML={{ __html: htmlCodeForUserName(username) }}
+        />
+      )}
 
       <div className="flex flex-col space-y-4 w-full max-w-md p-2">
         <div className="flex flex-col space-y-1">
