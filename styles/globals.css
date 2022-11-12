@@ -1,26 +1,19 @@
-html,
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  @apply bg-slate-200;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+input {
+  @apply shadow p-2 rounded;
 }
 
-* {
-  box-sizing: border-box;
+button, button[type='submit'], button[type='button'] {
+  @apply bg-slate-600 text-white px-4 rounded shadow
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+label {
+  @apply text-sm text-slate-700
 }
