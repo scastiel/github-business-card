@@ -7,6 +7,13 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
       <head>
         <title>GitHub Image</title>
         <meta name="viewport" content="width=device-width" />
+        {process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN && (
+          <script
+            defer
+            data-domain={process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN}
+            src="https://plausible.io/js/script.js"
+          ></script>
+        )}
       </head>
       <body>
         <header className="bg-slate-800 text-white p-2 text-lg">
