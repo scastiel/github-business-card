@@ -30,7 +30,6 @@ export default async function handle(req: NextRequest) {
     )
   }
   const user = await res.json()
-  console.log(user)
 
   return new ImageResponse(
     (
@@ -52,7 +51,10 @@ export default async function handle(req: NextRequest) {
           </div>
           <div tw="flex w-2/3 flex-col pr-16">
             <div tw="text-7xl">{user.name}</div>
-            <div tw="text-3xl text-slate-600 mb-2">{user.login}</div>
+            <div tw="text-3xl text-slate-600 mb-2 flex">
+              <span tw="text-slate-400">github.com/</span>
+              {user.login}
+            </div>
             {user.bio && (
               <div tw="text-3xl">
                 {user.bio
