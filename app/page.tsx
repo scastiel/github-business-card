@@ -80,7 +80,11 @@ export default function HomePage() {
           <ExternalLink href="https://vercel.com/docs/concepts/functions/edge-functions/og-image-generation">
             Vercel’s image generation library
           </ExternalLink>
-          . Its source code is <ExternalLink>available on GitHub</ExternalLink>.
+          . Its source code is{' '}
+          <ExternalLink href="https://github.com/scastiel/github-business-card">
+            available on GitHub
+          </ExternalLink>
+          .
         </p>
         <p>
           Curious how to generate images? I wrote{' '}
