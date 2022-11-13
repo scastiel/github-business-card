@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 export default function Generator() {
-  const [username, setUsername] = useState('scastiel')
+  const [username, setUsername] = useState('michael-scott-12')
   const [tempUsername, setTempUsername] = useState(username)
   const [isBrowser, setIsBrowser] = useState(false)
 
