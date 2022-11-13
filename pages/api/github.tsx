@@ -13,6 +13,7 @@ const IMAGE_HEIGHT = 628
 export default async function handle(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const username = searchParams.get('username')
+  const dark = searchParams.has('dark')
 
   if (!username) {
     return errorResponse('No username provided.')
@@ -34,7 +35,11 @@ export default async function handle(req: NextRequest) {
   return new ImageResponse(
     (
       <div tw="flex w-full h-full items-center justify-center p-8">
-        <div tw="bg-white w-full h-full flex text-2xl items-center shadow-xl">
+        <div
+          tw={`${
+            dark ? 'bg-slate-900 text-slate-200' : 'bg-white text-black'
+          } w-full h-full flex text-2xl items-center shadow-xl`}
+        >
           <div tw="flex w-1/3 justify-end pb-12 mr-12">
             <div tw="flex flex-col items-center">
               <img
@@ -42,9 +47,9 @@ export default async function handle(req: NextRequest) {
                 tw="w-64 h-64 rounded-full shadow-2xl mb-4"
                 style={{ objectPosition: 'center', objectFit: 'cover' }}
               />
-              <div tw="text-xl text-slate-500">{`Since ${new Date(
-                user.created_at
-              ).toLocaleDateString('en-US', {
+              <div
+                tw={`text-xl ${dark ? 'text-slate-300' : 'text-slate-500'}`}
+              >{`Since ${new Date(user.created_at).toLocaleDateString('en-US', {
                 month: 'long',
                 year: 'numeric',
               })}`}</div>
@@ -52,8 +57,14 @@ export default async function handle(req: NextRequest) {
           </div>
           <div tw="flex w-2/3 flex-col pr-16">
             <div tw="text-7xl">{user.name}</div>
-            <div tw="text-3xl text-slate-600 mb-2 flex">
-              <span tw="text-slate-400">github.com/</span>
+            <div
+              tw={`text-3xl mb-2 flex ${
+                dark ? `text-slate-300` : `text-slate-400`
+              }`}
+            >
+              <span tw={dark ? `text-slate-500` : `text-slate-400`}>
+                github.com/
+              </span>
               {user.login}
             </div>
             {user.bio && (
@@ -67,7 +78,7 @@ export default async function handle(req: NextRequest) {
               </div>
             )}
             <div tw="flex mb-2 mt-8">
-              👾{' '}
+              👥{' '}
               {user.followers === 1
                 ? `${user.followers} follower`
                 : `${user.followers} followers`}{' '}

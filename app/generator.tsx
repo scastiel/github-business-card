@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 
 export default function Generator() {
   const [username, setUsername] = useState('michael-scott-12')
+  const [dark, setDark] = useState(false)
   const [tempUsername, setTempUsername] = useState(username)
   const [isBrowser, setIsBrowser] = useState(false)
 
@@ -39,9 +40,23 @@ export default function Generator() {
       </div>
       {isBrowser && (
         <div
-          dangerouslySetInnerHTML={{ __html: htmlCodeForUserName(username) }}
+          dangerouslySetInnerHTML={{
+            __html: htmlCodeForUserName(username, dark),
+          }}
         />
       )}
+
+      <div className="flex">
+        <div className="flex space-x-2 items-center">
+          <input
+            id="dark"
+            type="checkbox"
+            checked={dark}
+            onChange={(e) => setDark(e.target.checked)}
+          />
+          <label htmlFor="dark">Dark mode</label>
+        </div>
+      </div>
 
       <div className="flex flex-col space-y-4 w-full max-w-md p-2">
         <div className="flex flex-col space-y-1">
@@ -49,7 +64,7 @@ export default function Generator() {
           <CopyInput
             id="imageUrl"
             readOnly
-            value={imageUrlForUsername(username)}
+            value={imageUrlForUsername(username, dark)}
           />
         </div>
         <div className="flex flex-col space-y-1">
@@ -57,7 +72,7 @@ export default function Generator() {
           <CopyInput
             id="htmlCode"
             readOnly
-            value={htmlCodeForUserName(username)}
+            value={htmlCodeForUserName(username, dark)}
           />
         </div>
         <div className="flex flex-col space-y-1 items-stretch">
@@ -65,7 +80,7 @@ export default function Generator() {
           <CopyInput
             id="markdownCode"
             readOnly
-            value={markdownCodeForUserName(username)}
+            value={markdownCodeForUserName(username, dark)}
           />
         </div>
       </div>
@@ -106,24 +121,24 @@ function CopyInput(props: JSX.IntrinsicElements['input']) {
   )
 }
 
-function imageUrlForUsername(username: string) {
+function imageUrlForUsername(username: string, dark: boolean) {
   return `${
     process.env.NEXT_PUBLIC_BASE_URL
-  }/api/github?username=${encodeURIComponent(username)}`
+  }/api/github?username=${encodeURIComponent(username)}${dark ? '&dark' : ''}`
 }
 
 function imageAltForUsername(username: string) {
   return `${username}’s GitHub image`
 }
 
-function htmlCodeForUserName(username: string) {
-  const imageUrl = imageUrlForUsername(username)
+function htmlCodeForUserName(username: string, dark: boolean) {
+  const imageUrl = imageUrlForUsername(username, dark)
   const imageAlt = imageAltForUsername(username)
   return `<a href="https://github.com/${username}" target="_blank" rel="noopener noreferrer"><img src="${imageUrl}" alt="${imageAlt}" width="600" height="314" />`
 }
 
-function markdownCodeForUserName(username: string) {
-  const imageUrl = imageUrlForUsername(username)
+function markdownCodeForUserName(username: string, dark: boolean) {
+  const imageUrl = imageUrlForUsername(username, dark)
   const imageAlt = imageAltForUsername(username)
   return `![${imageAlt}](${imageUrl})`
 }
