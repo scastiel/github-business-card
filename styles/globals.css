@@ -10,8 +10,8 @@ input {
   @apply shadow p-2 rounded;
 }
 
-button, button[type='submit'], button[type='button'] {
-  @apply bg-slate-600 text-white px-4 rounded shadow
+button, button[type='submit'], button[type='button'], a.button {
+  @apply bg-slate-600 hover:bg-slate-800 text-white px-4 rounded shadow h-10 items-center flex
 }
 
 label {
@@ -65,8 +65,7 @@ input[type=checkbox]:hover {
 }
 
 input[type=checkbox]:checked {
-  /* background-color: #6e79d6; */
-  @apply bg-slate-800;
+  @apply bg-slate-600;
 }
 
 input[type=checkbox]:checked::after {
@@ -75,6 +74,5 @@ input[type=checkbox]:checked::after {
 }
 
 input[type=checkbox]:checked:hover {
-  /* background-color: #535db3; */
-  @apply bg-slate-900;
+  @apply bg-slate-800;
 }

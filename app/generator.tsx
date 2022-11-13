@@ -46,7 +46,7 @@ export default function Generator() {
         />
       )}
 
-      <div className="flex">
+      <div className="flex space-x-4">
         <div className="flex space-x-2 items-center">
           <input
             id="dark"
@@ -56,6 +56,13 @@ export default function Generator() {
           />
           <label htmlFor="dark">Dark mode</label>
         </div>
+        <a
+          href={imageUrlForUsername(username, dark)}
+          download={`${username}-github-business-card.png`}
+          className="button"
+        >
+          Download
+        </a>
       </div>
 
       <div className="flex flex-col space-y-4 w-full max-w-md p-2">
