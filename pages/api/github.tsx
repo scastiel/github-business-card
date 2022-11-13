@@ -68,7 +68,7 @@ export default async function handle(req: NextRequest) {
             )}
             <div tw="flex mb-2 mt-8">
               👾{' '}
-              {user.followers <= 1
+              {user.followers === 1
                 ? `${user.followers} follower`
                 : `${user.followers} followers`}{' '}
               · {`${user.following} following`}
