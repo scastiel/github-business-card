@@ -90,8 +90,8 @@ export default async function handle(req: NextRequest) {
                 👥{' '}
                 {user.followers === 1
                   ? `${user.followers} follower`
-                  : `${user.followers} followers`}{' '}
-                · {`${user.following} following`}
+                  : `${user.followers.toLocaleString('en-US')} followers`}{' '}
+                · {`${user.following.toLocaleString('en-US')} following`}
               </div>
               <div tw="flex flex-wrap">
                 {user.company && (
