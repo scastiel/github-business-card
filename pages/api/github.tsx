@@ -134,6 +134,7 @@ export default async function handle(req: NextRequest) {
     {
       width: IMAGE_WIDTH,
       height: IMAGE_HEIGHT,
+      headers: { 'cache-control': 'public, max-age=60' },
     }
   )
 }

@@ -9,7 +9,6 @@ export default function Generator() {
   const [dark, setDark] = useState(false)
   const [tempUsername, setTempUsername] = useState('')
   const [isBrowser, setIsBrowser] = useState(false)
-  const [update, setUpdate] = useState(0)
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -19,7 +18,6 @@ export default function Generator() {
     const randomUser = randomTopUsername()
     setUsername(randomUser)
     setTempUsername(randomUser)
-    setUpdate(Date.now())
   }, [])
 
   useEffect(() => {
@@ -71,7 +69,7 @@ export default function Generator() {
           <div className="z-10 relative">
             <div
               dangerouslySetInnerHTML={{
-                __html: htmlCodeForUserName(username, dark, update),
+                __html: htmlCodeForUserName(username, dark),
               }}
             />
           </div>
@@ -89,7 +87,7 @@ export default function Generator() {
           <label htmlFor="dark">Dark mode</label>
         </div>
         <a
-          href={imageUrlForUsername(username, dark, update)}
+          href={imageUrlForUsername(username, dark)}
           download={`${username}-github-business-card.png`}
           className="button"
         >
@@ -103,7 +101,7 @@ export default function Generator() {
           <CopyInput
             id="imageUrl"
             readOnly
-            value={imageUrlForUsername(username, dark, update)}
+            value={imageUrlForUsername(username, dark)}
           />
         </div>
         <div className="flex flex-col space-y-1">
@@ -111,7 +109,7 @@ export default function Generator() {
           <CopyInput
             id="htmlCode"
             readOnly
-            value={htmlCodeForUserName(username, dark, update)}
+            value={htmlCodeForUserName(username, dark)}
           />
         </div>
         <div className="flex flex-col space-y-1 items-stretch">
@@ -119,7 +117,7 @@ export default function Generator() {
           <CopyInput
             id="markdownCode"
             readOnly
-            value={markdownCodeForUserName(username, dark, update)}
+            value={markdownCodeForUserName(username, dark)}
           />
         </div>
       </div>
@@ -160,30 +158,24 @@ function CopyInput(props: JSX.IntrinsicElements['input']) {
   )
 }
 
-function imageUrlForUsername(username: string, dark: boolean, update: number) {
+function imageUrlForUsername(username: string, dark: boolean) {
   return `${
     process.env.NEXT_PUBLIC_BASE_URL
-  }/api/github?username=${encodeURIComponent(username)}&update=${update}${
-    dark ? '&dark' : ''
-  }`
+  }/api/github?username=${encodeURIComponent(username)}${dark ? '&dark' : ''}`
 }
 
 function imageAltForUsername(username: string) {
   return `${username}’s GitHub image`
 }
 
-function htmlCodeForUserName(username: string, dark: boolean, update: number) {
-  const imageUrl = imageUrlForUsername(username, dark, update)
+function htmlCodeForUserName(username: string, dark: boolean) {
+  const imageUrl = imageUrlForUsername(username, dark)
   const imageAlt = imageAltForUsername(username)
   return `<a href="https://github.com/${username}" target="_blank" rel="noopener noreferrer"><img src="${imageUrl}" alt="${imageAlt}" width="600" height="314" />`
 }
 
-function markdownCodeForUserName(
-  username: string,
-  dark: boolean,
-  update: number
-) {
-  const imageUrl = imageUrlForUsername(username, dark, update)
+function markdownCodeForUserName(username: string, dark: boolean) {
+  const imageUrl = imageUrlForUsername(username, dark)
   const imageAlt = imageAltForUsername(username)
   return `![${imageAlt}](${imageUrl})`
 }
