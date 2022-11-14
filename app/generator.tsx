@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { randomTopUsername } from './top-users'
 
@@ -9,6 +10,8 @@ export default function Generator() {
   const [tempUsername, setTempUsername] = useState('')
   const [isBrowser, setIsBrowser] = useState(false)
   const [update, setUpdate] = useState(0)
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     setIsBrowser(true)
@@ -18,6 +21,20 @@ export default function Generator() {
     setTempUsername(randomUser)
     setUpdate(Date.now())
   }, [])
+
+  useEffect(() => {
+    const user = searchParams.get('user')
+    if (user) {
+      setUsername(user)
+      setTempUsername(user)
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    if (username) {
+      router.replace(`/?user=${encodeURIComponent(username)}`)
+    }
+  }, [username, router])
 
   return (
     <>
