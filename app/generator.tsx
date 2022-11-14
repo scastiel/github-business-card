@@ -8,6 +8,7 @@ export default function Generator() {
   const [dark, setDark] = useState(false)
   const [tempUsername, setTempUsername] = useState('')
   const [isBrowser, setIsBrowser] = useState(false)
+  const [update, setUpdate] = useState(0)
 
   useEffect(() => {
     setIsBrowser(true)
@@ -15,6 +16,7 @@ export default function Generator() {
     const randomUser = randomTopUsername()
     setUsername(randomUser)
     setTempUsername(randomUser)
+    setUpdate(Date.now())
   }, [])
 
   return (
@@ -23,6 +25,7 @@ export default function Generator() {
         onSubmit={(event) => {
           event.preventDefault()
           setUsername(tempUsername)
+          setUpdate(Date.now())
         }}
         className="flex flex-col space-y-1 p-2"
       >
@@ -43,12 +46,20 @@ export default function Generator() {
         <br />
         <small>(it’s an image!)</small>
       </div>
+
       {isBrowser && (
-        <div
-          dangerouslySetInnerHTML={{
-            __html: htmlCodeForUserName(username, dark),
-          }}
-        />
+        <div className="relative">
+          <div className="z-0 absolute inset-0 flex justify-center items-center text-slate-600 text-sm">
+            Loading…
+          </div>
+          <div className="z-10 relative">
+            <div
+              dangerouslySetInnerHTML={{
+                __html: htmlCodeForUserName(username, dark, update),
+              }}
+            />
+          </div>
+        </div>
       )}
 
       <div className="flex space-x-4">
@@ -62,7 +73,7 @@ export default function Generator() {
           <label htmlFor="dark">Dark mode</label>
         </div>
         <a
-          href={imageUrlForUsername(username, dark)}
+          href={imageUrlForUsername(username, dark, update)}
           download={`${username}-github-business-card.png`}
           className="button"
         >
@@ -76,7 +87,7 @@ export default function Generator() {
           <CopyInput
             id="imageUrl"
             readOnly
-            value={imageUrlForUsername(username, dark)}
+            value={imageUrlForUsername(username, dark, update)}
           />
         </div>
         <div className="flex flex-col space-y-1">
@@ -84,7 +95,7 @@ export default function Generator() {
           <CopyInput
             id="htmlCode"
             readOnly
-            value={htmlCodeForUserName(username, dark)}
+            value={htmlCodeForUserName(username, dark, update)}
           />
         </div>
         <div className="flex flex-col space-y-1 items-stretch">
@@ -92,7 +103,7 @@ export default function Generator() {
           <CopyInput
             id="markdownCode"
             readOnly
-            value={markdownCodeForUserName(username, dark)}
+            value={markdownCodeForUserName(username, dark, update)}
           />
         </div>
       </div>
@@ -133,24 +144,30 @@ function CopyInput(props: JSX.IntrinsicElements['input']) {
   )
 }
 
-function imageUrlForUsername(username: string, dark: boolean) {
+function imageUrlForUsername(username: string, dark: boolean, update: number) {
   return `${
     process.env.NEXT_PUBLIC_BASE_URL
-  }/api/github?username=${encodeURIComponent(username)}${dark ? '&dark' : ''}`
+  }/api/github?username=${encodeURIComponent(username)}&update=${update}${
+    dark ? '&dark' : ''
+  }`
 }
 
 function imageAltForUsername(username: string) {
   return `${username}’s GitHub image`
 }
 
-function htmlCodeForUserName(username: string, dark: boolean) {
-  const imageUrl = imageUrlForUsername(username, dark)
+function htmlCodeForUserName(username: string, dark: boolean, update: number) {
+  const imageUrl = imageUrlForUsername(username, dark, update)
   const imageAlt = imageAltForUsername(username)
   return `<a href="https://github.com/${username}" target="_blank" rel="noopener noreferrer"><img src="${imageUrl}" alt="${imageAlt}" width="600" height="314" />`
 }
 
-function markdownCodeForUserName(username: string, dark: boolean) {
-  const imageUrl = imageUrlForUsername(username, dark)
+function markdownCodeForUserName(
+  username: string,
+  dark: boolean,
+  update: number
+) {
+  const imageUrl = imageUrlForUsername(username, dark, update)
   const imageAlt = imageAltForUsername(username)
   return `![${imageAlt}](${imageUrl})`
 }
