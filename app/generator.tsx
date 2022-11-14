@@ -1,15 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { useEffect, useRef, useState } from 'react'
+import { randomTopUsername } from './top-users'
 
 export default function Generator() {
-  const [username, setUsername] = useState('michael-scott-12')
+  const [username, setUsername] = useState('')
   const [dark, setDark] = useState(false)
-  const [tempUsername, setTempUsername] = useState(username)
+  const [tempUsername, setTempUsername] = useState('')
   const [isBrowser, setIsBrowser] = useState(false)
 
   useEffect(() => {
     setIsBrowser(true)
+
+    const randomUser = randomTopUsername()
+    setUsername(randomUser)
+    setTempUsername(randomUser)
   }, [])
 
   return (
