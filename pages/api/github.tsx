@@ -65,7 +65,7 @@ export default async function handle(req: NextRequest) {
               </div>
             </div>
             <div tw="flex w-2/3 flex-col pr-16">
-              <div tw="text-7xl">{user.name}</div>
+              <div tw="text-6xl">{user.name}</div>
               <div
                 tw={`text-3xl mb-2 flex ${
                   dark ? `text-slate-300` : `text-slate-400`
@@ -77,7 +77,7 @@ export default async function handle(req: NextRequest) {
                 {user.login}
               </div>
               {user.bio && (
-                <div tw="text-3xl">
+                <div tw="text-2xl">
                   {user.bio
                     .replace(
                       /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,

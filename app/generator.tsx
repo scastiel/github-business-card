@@ -25,7 +25,6 @@ export default function Generator() {
         onSubmit={(event) => {
           event.preventDefault()
           setUsername(tempUsername)
-          setUpdate(Date.now())
         }}
         className="flex flex-col space-y-1 p-2"
       >
