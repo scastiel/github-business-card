@@ -1,38 +1,28 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
-import { randomTopUsername } from './top-users'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { pageTitle } from '../seo-headers'
+import { randomTopUsername } from '../top-users'
+import { CopyInput } from './copy-input'
 
 export default function Generator() {
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useUsername()
   const [dark, setDark] = useState(false)
-  const [tempUsername, setTempUsername] = useState('')
+  const [tempUsername, setTempUsername] = useState(username)
   const [isBrowser, setIsBrowser] = useState(false)
-  const router = useRouter()
-  const searchParams = useSearchParams()
 
   useEffect(() => {
     setIsBrowser(true)
-
-    const randomUser = randomTopUsername()
-    setUsername(randomUser)
-    setTempUsername(randomUser)
   }, [])
 
   useEffect(() => {
-    const user = searchParams.get('user')
-    if (user) {
-      setUsername(user)
-      setTempUsername(user)
+    if (!username) {
+      const randomUser = randomTopUsername()
+      setUsername(randomUser, false)
+      setTempUsername(randomUser)
     }
-  }, [searchParams])
-
-  useEffect(() => {
-    if (username) {
-      router.replace(`/?user=${encodeURIComponent(username)}`)
-    }
-  }, [username, router])
+  }, [setUsername, username])
 
   return (
     <>
@@ -64,7 +54,7 @@ export default function Generator() {
       {isBrowser && (
         <div className="relative">
           <div className="z-0 absolute inset-0 flex justify-center items-center text-slate-600 text-sm">
-            Loading…
+            Loading… (can take a few seconds)
           </div>
           <div className="z-10 relative">
             <div
@@ -125,39 +115,6 @@ export default function Generator() {
   )
 }
 
-function CopyInput(props: JSX.IntrinsicElements['input']) {
-  const [buttonText, setButtonText] = useState('Copy')
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    }
-  }, [])
-
-  return (
-    <div className="flex space-x-2">
-      <input className="flex-1" {...props} />
-      <button
-        type="button"
-        onClick={() => {
-          if (timeoutRef.current) clearTimeout(timeoutRef.current)
-
-          if (props.value && 'clipboard' in navigator) {
-            navigator.clipboard.writeText(String(props.value))
-            setButtonText('Copied!')
-            timeoutRef.current = setTimeout(() => {
-              setButtonText('Copy')
-            }, 5000)
-          }
-        }}
-      >
-        {buttonText}
-      </button>
-    </div>
-  )
-}
-
 function imageUrlForUsername(username: string, dark: boolean) {
   return `${
     process.env.NEXT_PUBLIC_BASE_URL
@@ -178,4 +135,23 @@ function markdownCodeForUserName(username: string, dark: boolean) {
   const imageUrl = imageUrlForUsername(username, dark)
   const imageAlt = imageAltForUsername(username)
   return `![${imageAlt}](${imageUrl})`
+}
+
+function useUsername(): [
+  string,
+  (username: string, updateUrl?: boolean) => void
+] {
+  const router = useRouter()
+  const pathname = usePathname()!
+  const [user, setUser] = useState(pathname.replace(/^\//, ''))
+
+  const setUsername = (username: string, updateUrl = true) => {
+    if (updateUrl) {
+      router.replace(`/${username}`)
+      document.title = pageTitle(username)
+    }
+    setUser(username)
+  }
+
+  return [user, setUsername]
 }

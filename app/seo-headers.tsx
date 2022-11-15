@@ -1,22 +1,18 @@
 interface Props {
-  title: string
-  description: string
-  author: string
-  twitterAuthor: string
-  twitterSite: string
-  url?: string
-  imageUrl: string
+  username?: string
 }
 
-export function SeoHeaders({
-  title,
-  description,
-  author,
-  twitterAuthor,
-  twitterSite,
-  url,
-  imageUrl,
-}: Props) {
+export function SeoHeaders({ username }: Props) {
+  const title = pageTitle(username)
+  const description =
+    'Generate your custom image from your GitHub username. A fun experiment of image generation.'
+  const author = 'Sebastien Castiel'
+  const twitterAuthor = 'scastiel'
+  const twitterSite = 'scastiel'
+  const url = process.env.NEXT_PUBLIC_BASE_URL
+  const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/github?username=${
+    username || 'michael-scott-12'
+  }`
   return (
     <>
       <title>{title}</title>
@@ -38,4 +34,8 @@ export function SeoHeaders({
       <meta name="twitter:description" content={description} />
     </>
   )
+}
+
+export function pageTitle(username: any): string {
+  return `${username ? `${username} · ` : ''}GitHub Business Card`
 }

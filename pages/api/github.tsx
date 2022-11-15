@@ -45,6 +45,14 @@ export default async function handle(req: NextRequest) {
             dark ? 'bg-slate-900 text-slate-200' : 'bg-white text-black'
           } flex-1 items-stretch flex flex-col text-2xl shadow-xl`}
         >
+          <div tw="flex -mb-12 self-end py-2 px-4">
+            <span tw={`${dark ? `text-slate-500` : `text-slate-300`} mr-2`}>
+              Get your card at
+            </span>{' '}
+            <span tw={`${dark ? `text-slate-300` : `text-slate-500`}`}>
+              crd.so
+            </span>
+          </div>
           <div tw="flex items-center flex-1 border-4">
             <div tw="flex w-1/3 justify-end pb-12 mr-12">
               <div tw="flex flex-col items-center">

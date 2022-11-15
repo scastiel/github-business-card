@@ -1,45 +1,16 @@
-import Generator from './generator'
+import { redirect } from 'next/navigation'
+import { ParsedUrlQueryInput } from 'querystring'
+import { randomTopUsername } from './top-users'
+import UserPage from './[username]/page'
 
-export default function HomePage() {
-  return (
-    <div className="flex flex-col items-center max-w-screen-sm mx-auto space-y-6 pt-8">
-      <Generator />
-
-      <div className="p-2 prose self-stretch">
-        <h2>About</h2>
-        <p>
-          I’m{' '}
-          <ExternalLink href="https://scastiel.dev">
-            Sebastien Castiel
-          </ExternalLink>{' '}
-          and I built this project for fun, to play with{' '}
-          <ExternalLink href="https://vercel.com/docs/concepts/functions/edge-functions/og-image-generation">
-            Vercel’s image generation library
-          </ExternalLink>
-          . Its source code is{' '}
-          <ExternalLink href="https://github.com/scastiel/github-business-card">
-            available on GitHub
-          </ExternalLink>
-          .
-        </p>
-        <p>
-          Curious how to generate images? I wrote{' '}
-          <ExternalLink href="https://scastiel.dev/create-og-images-for-your-blog-with-nextjs">
-            a short tutorial for you!
-          </ExternalLink>
-        </p>
-        <p>
-          And if you’re interested in Next.js, also{' '}
-          <ExternalLink href="https://amzn.to/3EtlfVB">
-            check out the book I wrote about it
-          </ExternalLink>
-          .
-        </p>
-      </div>
-    </div>
-  )
+interface Props {
+  searchParams: ParsedUrlQueryInput
 }
 
-function ExternalLink(props: JSX.IntrinsicElements['a']) {
-  return <a {...props} rel="noopener noreferrer" target="_blank" />
+export default function HomePage({ searchParams }: Props) {
+  if (searchParams.user) {
+    redirect(`/${searchParams.user}`)
+  }
+
+  return <UserPage />
 }
