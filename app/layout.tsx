@@ -17,9 +17,14 @@ const RootLayout = async ({ children }: PropsWithChildren) => {
         )}
       </head>
       <body>
-        <header className="bg-slate-800 text-white p-2 text-lg">
+        <header className="bg-slate-800 text-white p-2">
           <h1>
-            <Link href="/">GitHub Business Card</Link>
+            <Link href="/" className="flex space-x-3 items-baseline">
+              <span className="text-slate-200 font-mono text-lg">crd.so</span>
+              <span className="text-slate-400 italic text-sm sm:text-base">
+                Create your GitHub Business Card
+              </span>
+            </Link>
           </h1>
         </header>
         <main className="mb-16">{children}</main>

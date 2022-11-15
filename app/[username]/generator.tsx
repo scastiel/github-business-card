@@ -54,7 +54,7 @@ export default function Generator() {
 
       {isBrowser && (
         <div className="relative">
-          <div className="z-0 absolute inset-0 flex justify-center items-center text-slate-600 text-sm">
+          <div className="z-0 absolute inset-0 flex justify-center items-center text-slate-400 text-sm">
             Loading… (can take a few seconds)
           </div>
           <div className="z-10 relative">

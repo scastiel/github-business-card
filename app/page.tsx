@@ -4,11 +4,11 @@ import { randomTopUsername } from './top-users'
 import UserPage from './[username]/page'
 
 interface Props {
-  searchParams: ParsedUrlQueryInput
+  searchParams?: ParsedUrlQueryInput
 }
 
 export default function HomePage({ searchParams }: Props) {
-  if (searchParams.user) {
+  if (searchParams?.user) {
     redirect(`/${searchParams.user}`)
   }
 
