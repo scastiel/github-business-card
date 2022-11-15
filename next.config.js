@@ -4,6 +4,9 @@ const nextConfig = {
   swcMinify: true,
   experimental: { appDir: true },
   images: { domains: ['localhost'] },
+  rewrites() {
+    return [{ source: '/i/:path*', destination: '/api/image/:path*' }]
+  },
 }
 
 module.exports = nextConfig

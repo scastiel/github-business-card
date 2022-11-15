@@ -134,11 +134,10 @@ function imageUrlForUsername(
   dark: boolean,
   removeLink: boolean
 ) {
-  return `${
-    process.env.NEXT_PUBLIC_BASE_URL
-  }/api/github?username=${encodeURIComponent(username)}${dark ? '&dark' : ''}${
-    removeLink ? '&removeLink' : ''
-  }`
+  const params = [dark && 'dark', removeLink && 'removeLink'].filter(Boolean)
+  return `${process.env.NEXT_PUBLIC_BASE_URL}/i/${encodeURIComponent(
+    username
+  )}${params.length > 0 ? `?${params.join('&')}` : ''}`
 }
 
 function imageAltForUsername(username: string) {
