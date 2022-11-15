@@ -12,7 +12,7 @@ export function SeoHeaders({ username }: Props) {
   const url = process.env.NEXT_PUBLIC_BASE_URL
   const imageUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/github?username=${
     username || 'michael-scott-12'
-  }`
+  }&noBorder`
   return (
     <>
       <title>{title}</title>

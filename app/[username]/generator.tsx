@@ -9,6 +9,7 @@ import { CopyInput } from './copy-input'
 export default function Generator() {
   const [username, setUsername] = useUsername()
   const [dark, setDark] = useState(false)
+  const [removeLink, setRemoveLink] = useState(false)
   const [tempUsername, setTempUsername] = useState(username)
   const [isBrowser, setIsBrowser] = useState(false)
 
@@ -59,25 +60,38 @@ export default function Generator() {
           <div className="z-10 relative">
             <div
               dangerouslySetInnerHTML={{
-                __html: htmlCodeForUserName(username, dark),
+                __html: htmlCodeForUserName(username, dark, removeLink),
               }}
             />
           </div>
         </div>
       )}
 
-      <div className="flex space-x-4">
-        <div className="flex space-x-2 items-center">
-          <input
-            id="dark"
-            type="checkbox"
-            checked={dark}
-            onChange={(e) => setDark(e.target.checked)}
-          />
-          <label htmlFor="dark">Dark mode</label>
+      <div className="flex flex-col items-center space-y-4 sm:flex-row sm:space-x-6 sm:space-y-0">
+        <div className="flex space-x-6">
+          <div className="flex space-x-2 items-center">
+            <input
+              id="dark"
+              type="checkbox"
+              checked={dark}
+              onChange={(e) => setDark(e.target.checked)}
+            />
+            <label htmlFor="dark">Dark mode</label>
+          </div>
+          <div className="flex space-x-2 items-center">
+            <input
+              id="removeLink"
+              type="checkbox"
+              checked={removeLink}
+              onChange={(e) => setRemoveLink(e.target.checked)}
+            />
+            <label htmlFor="removeLink">
+              Remove <strong>crd.so</strong> link
+            </label>
+          </div>
         </div>
         <a
-          href={imageUrlForUsername(username, dark)}
+          href={imageUrlForUsername(username, dark, removeLink)}
           download={`${username}-github-business-card.png`}
           className="button"
         >
@@ -91,7 +105,7 @@ export default function Generator() {
           <CopyInput
             id="imageUrl"
             readOnly
-            value={imageUrlForUsername(username, dark)}
+            value={imageUrlForUsername(username, dark, removeLink)}
           />
         </div>
         <div className="flex flex-col space-y-1">
@@ -99,7 +113,7 @@ export default function Generator() {
           <CopyInput
             id="htmlCode"
             readOnly
-            value={htmlCodeForUserName(username, dark)}
+            value={htmlCodeForUserName(username, dark, removeLink)}
           />
         </div>
         <div className="flex flex-col space-y-1 items-stretch">
@@ -107,7 +121,7 @@ export default function Generator() {
           <CopyInput
             id="markdownCode"
             readOnly
-            value={markdownCodeForUserName(username, dark)}
+            value={markdownCodeForUserName(username, dark, removeLink)}
           />
         </div>
       </div>
@@ -115,24 +129,38 @@ export default function Generator() {
   )
 }
 
-function imageUrlForUsername(username: string, dark: boolean) {
+function imageUrlForUsername(
+  username: string,
+  dark: boolean,
+  removeLink: boolean
+) {
   return `${
     process.env.NEXT_PUBLIC_BASE_URL
-  }/api/github?username=${encodeURIComponent(username)}${dark ? '&dark' : ''}`
+  }/api/github?username=${encodeURIComponent(username)}${dark ? '&dark' : ''}${
+    removeLink ? '&removeLink' : ''
+  }`
 }
 
 function imageAltForUsername(username: string) {
   return `${username}’s GitHub image`
 }
 
-function htmlCodeForUserName(username: string, dark: boolean) {
-  const imageUrl = imageUrlForUsername(username, dark)
+function htmlCodeForUserName(
+  username: string,
+  dark: boolean,
+  removeLink: boolean
+) {
+  const imageUrl = imageUrlForUsername(username, dark, removeLink)
   const imageAlt = imageAltForUsername(username)
   return `<a href="https://github.com/${username}" target="_blank" rel="noopener noreferrer"><img src="${imageUrl}" alt="${imageAlt}" width="600" height="314" />`
 }
 
-function markdownCodeForUserName(username: string, dark: boolean) {
-  const imageUrl = imageUrlForUsername(username, dark)
+function markdownCodeForUserName(
+  username: string,
+  dark: boolean,
+  removeLink: boolean
+) {
+  const imageUrl = imageUrlForUsername(username, dark, removeLink)
   const imageAlt = imageAltForUsername(username)
   return `![${imageAlt}](${imageUrl})`
 }

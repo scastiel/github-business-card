@@ -14,6 +14,8 @@ export default async function handle(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const username = searchParams.get('username')
   const dark = searchParams.has('dark')
+  const removeLink = searchParams.has('removeLink')
+  const noBorder = searchParams.has('noBorder')
 
   if (!username) {
     return errorResponse('No username provided.')
@@ -39,20 +41,24 @@ export default async function handle(req: NextRequest) {
 
   return new ImageResponse(
     (
-      <div tw="flex w-full h-full p-8 items-stretch">
+      <div tw={`flex w-full h-full items-stretch ${noBorder ? '' : 'p-8'}`}>
         <div
           tw={`${
             dark ? 'bg-slate-900 text-slate-200' : 'bg-white text-black'
-          } flex-1 items-stretch flex flex-col text-2xl shadow-xl`}
+          } ${
+            noBorder ? 'p-8' : 'shadow-xl'
+          } flex-1 items-stretch flex flex-col text-2xl`}
         >
-          <div tw="flex -mb-12 self-end py-2 px-4">
-            <span tw={`${dark ? `text-slate-500` : `text-slate-300`} mr-2`}>
-              Get your card at
-            </span>{' '}
-            <span tw={`${dark ? `text-slate-300` : `text-slate-500`}`}>
-              crd.so
-            </span>
-          </div>
+          {!removeLink && (
+            <div tw="flex h-16 -mb-16 self-end py-2 px-4">
+              <span tw={`${dark ? `text-slate-500` : `text-slate-300`} mr-2`}>
+                Get your card at
+              </span>{' '}
+              <span tw={`${dark ? `text-slate-300` : `text-slate-500`}`}>
+                crd.so
+              </span>
+            </div>
+          )}
           <div tw="flex items-center flex-1 border-4">
             <div tw="flex w-1/3 justify-end pb-12 mr-12">
               <div tw="flex flex-col items-center">
