@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { NextRequest } from 'next/server'
 import { ImageResponse } from '@vercel/og'
+import { User } from '../gh/[username]'
 
 export const config = {
   runtime: 'experimental-edge',
@@ -21,23 +22,19 @@ export default async function handle(req: NextRequest) {
     return errorResponse('No username provided.')
   }
 
-  const res = await fetch(`https://api.github.com/users/${username}`, {
-    headers: { Authorization: `Bearer ${process.env.GITHUB_PERSONAL_TOKEN}` },
-  })
-  if (res.status === 404) {
-    return errorResponse(`No GitHub user with username “${username}”.`)
-  }
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/gh/${username}`
+  )
   if (res.status !== 200) {
     try {
-      const json = await res.json()
-      console.log(json.message)
-    } catch (_) {}
-    return errorResponse(
-      'An error occurred when fetching information about the user.'
-    )
+      const { error } = await res.json()
+      return errorResponse(error)
+    } catch (_) {
+      return errorResponse('An unexpected error occurred.')
+    }
   }
-  const user = await res.json()
-  const contribs = await getContribsByWeek(username)
+
+  const user = (await res.json()) as User
 
   return new ImageResponse(
     (
@@ -122,7 +119,7 @@ export default async function handle(req: NextRequest) {
           </div>
           <div tw="flex flex-shrink-0 border -mt-24 justify-between p-2">
             <div tw="flex">
-              {contribs.map((week, wIndex) => (
+              {user.contribs.map((week, wIndex) => (
                 <div key={wIndex} tw="flex flex-col">
                   {week.map((day, dIndex) => (
                     <div
@@ -191,23 +188,4 @@ function errorResponse(message: string): ImageResponse {
     ),
     { width: IMAGE_WIDTH, height: IMAGE_HEIGHT }
   )
-}
-
-async function getContribsByWeek(username: string) {
-  const res = await fetch(`https://github.com/${username}`)
-  const html = await res.text()
-
-  const regex = /data-date="(.*?)" data-level="(.*?)"/g
-  let match: RegExpExecArray | null = null
-  const contribs = []
-  while ((match = regex.exec(html)) !== null) {
-    contribs.push(Number(match[2]))
-  }
-
-  const contribsByWeek = []
-  for (let i = 0; i <= contribs.length / 7; i++) {
-    contribsByWeek.push(contribs.slice(i * 7, (i + 1) * 7))
-  }
-
-  return contribsByWeek
 }
