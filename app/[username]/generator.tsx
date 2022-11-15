@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { pageTitle } from '../seo-headers'
 import { randomTopUsername } from '../top-users'
 import { CopyInput } from './copy-input'
@@ -170,15 +170,29 @@ function useUsername(): [
 ] {
   const router = useRouter()
   const pathname = usePathname()!
-  const [user, setUser] = useState(pathname.replace(/^\//, ''))
+  const searchParams = useSearchParams()!
 
-  const setUsername = (username: string, updateUrl = true) => {
-    if (updateUrl) {
-      router.replace(`/${username}`)
-      document.title = pageTitle(username)
+  const pathUser = pathname.replace(/^\//, '')
+  const searchUser = searchParams.get('user')
+
+  const [user, setUser] = useState(pathUser || searchUser || '')
+
+  const setUsername = useCallback(
+    (username: string, updateUrl = true) => {
+      if (updateUrl) {
+        router.replace(`/${username}`)
+        document.title = pageTitle(username)
+      }
+      setUser(username)
+    },
+    [router]
+  )
+
+  useEffect(() => {
+    if (searchUser && searchUser !== pathUser) {
+      setUsername(searchUser)
     }
-    setUser(username)
-  }
+  }, [pathUser, searchUser, setUsername])
 
   return [user, setUsername]
 }
