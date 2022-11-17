@@ -31,7 +31,7 @@ export default function UserPage() {
         </p>
         <p>
           And if you’re interested in Next.js, also{' '}
-          <ExternalLink href="https://amzn.to/3EtlfVB">
+          <ExternalLink href="https://amzn.to/3ECRIZo">
             check out the book I wrote about it
           </ExternalLink>
           .
